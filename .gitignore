@@ -1,0 +1,10 @@
+test_demo/
+kmodules_arm32/
+kmodules_arm64/
+tags
+cscope.files
+cscope.in.out
+cscope.out
+cscope.po.out
+
+

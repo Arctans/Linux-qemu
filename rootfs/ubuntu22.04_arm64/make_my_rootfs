@@ -1,0 +1,63 @@
+#!/bin/sh
+
+
+TARGET_FILE=rootfs_ubuntu22_04.ext4
+TEMP_DIR=rootfs_ubuntu22_04
+TEMP_FILE=rootfs_ubuntu22_04.tar.gz
+
+check_root()
+{
+	if [ "$(id -u)" != "0" ];then
+		echo "please run as a superuser "
+		echo "sudo ./make_my_rootfs"
+		exit 1
+	fi
+}
+
+pack_file()
+{
+	echo "pack_file"
+	if [  -d $TEMP_DIR  ];then
+		cd $TEMP_DIR
+		tar zcvf ../$TEMP_FILE ./
+		cd ../
+		split -b 40M $TEMP_FILE ${TEMP_FILE}_
+		else
+			    echo $TEMP_DIR not exist!
+	fi
+}
+make_image()
+{
+	echo "make_image"
+	 rm -rf $TEMP_DIR
+	 mkdir $TEMP_DIR
+
+	 cat ${TEMP_FILE}_* > $TEMP_FILE
+	 tar -xvf $TEMP_FILE -C $TEMP_DIR
+
+	 dd if=/dev/zero of=$TARGET_FILE seek=0 count=1200000 bs=1024
+	 mkfs.ext4 $TARGET_FILE -d $TEMP_DIR
+	 chmod 777 $TARGET_FILE
+	 e2fsck -p -f $TARGET_FILE
+	 resize2fs -M $TARGET_FILE
+	 qemu-img resize $TARGET_FILE 1G
+
+}
+
+check_root
+
+while getopts "pm" opt
+do
+	case $opt in
+		p)
+			pack_file
+			;;
+		m)
+			make_image
+			;;
+		?)
+			echo "there is unrecognized parameter." 	
+			exit 1
+			;;
+	esac
+done 

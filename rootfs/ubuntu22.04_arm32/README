@@ -1,0 +1,32 @@
+镜像制作:
+	1、从官网下载 http://cdimage.ubuntu.com/ubuntu-base/releases/22.04/release/ 下载ubuntu22.04
+	2、解压文件 sudo tar -xvf rootfs_ubuntu22_04.tar.gz -C rootfs_ubuntu22_04
+	3、拷贝cp /usr/bin/qemu-arm-static 到rootfs_ubuntu22_04/usr/bin 目录下
+	4、然后通过cd rootfs_ubuntu22_04下 执行 ch-mount.sh -m ./ 制作文件系统
+	5、cp /etc/resolv.conf rootfs_ubuntu22_04/etc/
+
+	6、apt-get update 更新
+	7、安装如下软件
+		apt-get install sudo
+		apt-get install net-tools
+		apt-get install base-completion
+		apt-get install ifupdown
+		apt-get install openssh-server
+		apt-get install vim
+		apt-get install kmod  #insmod rmmod 指令
+	
+	8、修改 etc/network/interfaces 文件 添加如下内容 用于启用网卡0
+		# interfaces(5) file used by ifup(8) and ifdown(8)
+		# Include files from /etc/network/interfaces.d:
+		source /etc/network/interfaces.d/*
+
+		#Arctan add
+		auto lo
+		iface lo inet loopback
+
+		auto eth0
+		iface eth0 inet dhcp
+	9、修改 etc/fstab  添加如下内容 挂载目录用于 主机与qemu 共享文件
+		# UNCONFIGURED FSTAB FOR BASE SYSTEM
+		# UNCONFIGURED FSTAB FOR BASE SYSTEM
+        kmod_mount    /mnt  9p trans=virtio  0 0

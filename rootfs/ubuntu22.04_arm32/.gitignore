@@ -1,0 +1,4 @@
+rootfs_ubuntu22_04.ext4
+rootfs_ubuntu22_04/
+ubuntu-base-22.04.1-base-armhf.tar.gz
+rootfs_ubuntu22_04.tar.gz

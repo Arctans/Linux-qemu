@@ -1,0 +1,36 @@
+#!/bin/sh
+
+make_arm32_config()
+{
+	cd linux
+	cp arch/arm/configs/my_vexpress_defconfig ./.config
+	make ARCH=arm menuconfig
+	if [ -f .config ];then
+		mv .config arch/arm/configs/my_vexpress_defconfig
+	fi
+	cd -
+
+}
+make_arm64_config()
+{
+	cd linux
+	cp arch/arm64/configs/my_defconfig ./.config
+	make ARCH=arm64 menuconfig
+	if [ -f .config ];then
+		mv .config arch/arm64/configs/my_defconfig
+	fi
+	cd -
+
+}
+if [  ! -n $1 ];then
+	echo "./make_my_config (arm | arm64)"
+fi
+case $1 in
+
+	arm)
+		make_arm32_config
+		;;
+	arm64)
+		make_arm32_config
+		;;
+esac

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export ARCH=arm
+export CROSS_COMPILE=arm-linux-gnueabihf-
+INSTALL_DIR=/home/arctan/workspace/linux/rootfs/busybox/busybox_rootfs
+BUSYBOX_DIR=/home/arctan/workspace/linux/rootfs/busybox/busybox-1.35.0
+# BUSYBOX_DIR=/home/arctan/workspace/linux/rootfs/busybox/busybox-1.29.3
+cd $BUSYBOX_DIR
+make defconfig
+make menuconfig
+cd -
+
+
