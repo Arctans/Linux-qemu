@@ -1,0 +1,98 @@
+#!/bin/sh
+
+LINUX_VERSION=linux-5.10
+
+usage()
+{
+	if [  -n $1 ];then
+		echo "板卡arm32 menuconfig 配置 sh build_arm32 -m (imx6dl | vexpress)"
+		echo "板卡arm32 zImage 编译 sh build_arm32 -k (imx6dl | vexpress)"
+	fi
+}
+
+#vexpress
+make_vexpress_menuconfig()
+{
+	cd $LINUX_VERSION
+	cp arch/arm/configs/vexpress_defconfig ./.config
+	make ARCH=arm menuconfig
+	if [ -f .config ];then
+		mv .config arch/arm/configs/vexpress_defconfig
+	fi
+	cd -
+}
+make_vexpress_zImage()
+{
+	cd $LINUX_VERSION
+	export KBUILD_OUTPUT=../out_vexpress_arm32_target
+	make ARCH=arm vexpress_defconfig
+	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- all -j16
+	cd ../
+}
+
+#imx6dl
+make_imx6dl_menuconfig()
+{
+	cd $LINUX_VERSION
+	cp arch/arm/configs/imx_v6_v7_defconfig ./.config
+	make ARCH=arm menuconfig
+	if [ -f .config ];then
+		mv .config arch/arm/configs/imx_v6_v7_defconfig
+	fi
+	cd -
+}
+make_imx6dl_zImage()
+{
+	cd $LINUX_VERSION
+	export KBUILD_OUTPUT=../out_imx6dl_arm32_target
+	make ARCH=arm imx_v6_v7_defconfig
+	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- all -j16
+	cd ../
+}
+
+
+build_linux_kernel()
+{
+	case $1 in
+		imx6dl)
+			make_imx6dl_zImage
+			;;
+		vexpress)
+			make_vexpress_zImage
+			;;
+	esac
+}
+build_linux_menuconfig()
+{
+	case $1 in
+		imx6dl)
+			make_imx6dl_menuconfig	
+			;;
+		vexpress)
+			make_vexpress_menuconfig
+			;;
+	esac
+}
+
+
+
+while getopts "k:m:h?" opt
+do
+	case $opt in
+		k)
+			build_linux_kernel $OPTARG
+			;;
+		m)
+			build_linux_menuconfig $OPTARG
+			;;
+		h)
+			usage
+			;;
+		?)
+			usage
+			;;
+	esac
+done 
+
+
+
