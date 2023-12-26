@@ -1,5 +1,6 @@
-test_demo/
 tags
+kmodules_arm32
+kmodules_arm64
 cscope.files
 cscope.in.out
 cscope.out
