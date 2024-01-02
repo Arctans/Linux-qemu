@@ -1,6 +1,7 @@
 #!/bin/sh
 
 LINUX_VERSION=linux-5.10
+COMPLIE_TOOLS=arm-linux-gnueabihf-
 
 usage()
 {
@@ -26,7 +27,7 @@ make_vexpress_zImage()
 	cd $LINUX_VERSION
 	export KBUILD_OUTPUT=../out_vexpress_arm32_target
 	make ARCH=arm vexpress_defconfig
-	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- all -j16
+	make ARCH=arm CROSS_COMPILE=${COMPLIE_TOOLS} all -j16
 	cd ../
 }
 
@@ -46,7 +47,7 @@ make_imx6dl_zImage()
 	cd $LINUX_VERSION
 	export KBUILD_OUTPUT=../out_imx6dl_arm32_target
 	make ARCH=arm imx_v6_v7_defconfig
-	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- all -j16
+	make ARCH=arm CROSS_COMPILE=${COMPLIE_TOOLS} all -j16
 	cd ../
 }
 
@@ -74,9 +75,12 @@ build_linux_menuconfig()
 	esac
 }
 
+if [  $# -eq 0 ];then
+	usage;
+	exit 1;
+fi
 
-
-while getopts "k:m:h?" opt
+while getopts "k:m:h" opt
 do
 	case $opt in
 		k)
@@ -86,9 +90,6 @@ do
 			build_linux_menuconfig $OPTARG
 			;;
 		h)
-			usage
-			;;
-		?)
 			usage
 			;;
 	esac
