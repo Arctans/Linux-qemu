@@ -20,7 +20,7 @@ run_vexpress()
 	qemu-system-aarch64 -m 1024 -cpu cortex-a57 -M xlnx-versal-virt\
 		$NO_GRAPHIC \
 		$CPU_NR \
-		$SMP -kernel ./out_vexpress_arm64_target/arch/arm64/boot/Image \
+		$SMP -kernel ./out/out_vexpress_arm64_target/arch/arm64/boot/Image \
 		-append "noinintrd root=/dev/vda rootfstype=ext4 rw loglevel=8 console=ttyAMA0" \
 		-drive if=none,file=$1,id=hd0 \
 		-device virtio-blk-device,drive=hd0 \
@@ -35,7 +35,7 @@ run_imx6dl()
 	qemu-system-aarch64 -m 1024 -cpu cortex-a9 -M sabrelite \
 		$NO_GRAPHIC \
 		$CPU_NR \
-		$SMP -kernel ./out_vexpress_arm64_target/arch/arm64/boot/Image \
+		$SMP -kernel ./out/out_vexpress_arm64_target/arch/arm64/boot/Image \
 		-append "noinintrd root=/dev/vda rootfstype=ext4 rw loglevel=8 console=ttyAMA0" \
 		--fsdev local,id=kmod_dev,path=./kmodules_arm64,security_model=none \
 		-net user,hostfwd=tcp::2224-:22 \

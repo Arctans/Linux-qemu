@@ -25,7 +25,7 @@ make_vexpress_menuconfig()
 make_vexpress_zImage()
 {
 	cd $LINUX_VERSION
-	export KBUILD_OUTPUT=../out_vexpress_arm32_target
+	export KBUILD_OUTPUT=../out/out_vexpress_arm32_target
 	make ARCH=arm vexpress_defconfig
 	make ARCH=arm CROSS_COMPILE=${COMPLIE_TOOLS} all -j16
 	cd ../
@@ -45,7 +45,7 @@ make_imx6dl_menuconfig()
 make_imx6dl_zImage()
 {
 	cd $LINUX_VERSION
-	export KBUILD_OUTPUT=../out_imx6dl_arm32_target
+	export KBUILD_OUTPUT=../out/out_imx6dl_arm32_target
 	make ARCH=arm imx_v6_v7_defconfig
 	make ARCH=arm CROSS_COMPILE=${COMPLIE_TOOLS} all -j16
 	cd ../

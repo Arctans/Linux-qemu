@@ -21,8 +21,8 @@ run_vexpress()
 		-M vexpress-a9 \
 		$CPU_NR \
 		-m 1024M \
-		-kernel ./out_vexpress_arm32_target/arch/arm/boot/zImage \
-		-dtb ./out_vexpress_arm32_target/arch/arm/boot/dts/vexpress-v2p-ca9.dtb \
+		-kernel ./out/out_vexpress_arm32_target/arch/arm/boot/zImage \
+		-dtb ./out/out_vexpress_arm32_target/arch/arm/boot/dts/vexpress-v2p-ca9.dtb \
 		 $NO_GRAPHIC \
 		-append "root=/dev/mmcblk0 rw console=ttyAMA0" \
 		--fsdev local,id=kmod_dev,path=./kmodules_arm32,security_model=none\
@@ -39,8 +39,8 @@ run_imx6dl()
 		-M sabrelite \
 		$CPU_NR \
 		-m 1024M \
-		-kernel ./out_imx6dl_arm32_target/arch/arm/boot/zImage \
-		-dtb ./out_imx6dl_arm32_target/arch/arm/boot/dts/imx6dl-sabresd.dtb \
+		-kernel ./out/out_imx6dl_arm32_target/arch/arm/boot/zImage \
+		-dtb ./out/out_imx6dl_arm32_target/arch/arm/boot/dts/imx6dl-sabresd.dtb \
 		 $NO_GRAPHIC \
 		-append "console=ttymxc0 rootfstype=ext4 rootwait root=/dev/mmcblk3"  \
 		--fsdev local,id=kmod_dev,path=./kmodules_arm32,security_model=none\
