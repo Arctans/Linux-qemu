@@ -35,7 +35,7 @@ make_image()
 	 cat ${TEMP_FILE}_* > $TEMP_FILE
 	 tar -xvf $TEMP_FILE -C $TEMP_DIR
 
-	 dd if=/dev/zero of=$TARGET_FILE seek=0 count=1200000 bs=1024
+	 dd if=/dev/zero of=$TARGET_FILE seek=0 count=2000000 bs=1024
 	 mkfs.ext4 $TARGET_FILE -d $TEMP_DIR
 	 chmod 777 $TARGET_FILE
 	 e2fsck -p -f $TARGET_FILE
