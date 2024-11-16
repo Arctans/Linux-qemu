@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+
+CUR_PATH=`pwd`
+drm="libdrm-2.4.114.tar.xz"
+src_dir=${CUR_PATH}/libdrm-2.4.114
+build_dir=${src_dir}/build
+
+
+#arm32
+build_drm()
+{
+	if [ ! -d ../${src_dir} ];then
+		tar xf ${drm}
+	fi
+
+	mkdir ${build_dir}
+	cd ${build_dir}
+	meson --prefix=${CUR_PATH}/install_arm32 --cross-file=../../cross_file.txt -D exynos=enabled	
+	ninja && ninja install
+	cd -
+}
+
+if [  "$1" != "arm32" ]  && [ "$1" != "clean" ];then
+	echo "./make_my_drm (arm32 | clean) "
+	exit -1
+fi
+if [  "$1" == "clean" ];then
+	rm -rf install* ${src_dir}
+	exit 0
+fi
+main_start()
+{
+
+	
+	if [ "$1" == "arm32" ];then
+		build_drm $1
+	fi
+
+}
+main_start $1 $2

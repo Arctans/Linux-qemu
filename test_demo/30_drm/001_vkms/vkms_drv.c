@@ -24,6 +24,7 @@
 #include <drm/drm_managed.h>
 #include <drm/drm_probe_helper.h>
 #include <drm/drm_vblank.h>
+#include <drm/drm_gem_cma_helper.h>
 
 #include "vkms_drv.h"
 
@@ -35,16 +36,58 @@
 
 static struct vkms_device *vkms_device;
 
+int vkms_drm_open(struct inode *inode, struct file *filp)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_open(inode, filp);
+}
+
+int vkms_drm_release(struct inode *inode, struct file *filp)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_release(inode, filp);
+}
+
+long vkms_drm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_ioctl(filp, cmd, arg);
+}
+
+__poll_t vkms_drm_poll(struct file *filp, struct poll_table_struct *wait)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_poll(filp, wait);
+}
+
+ssize_t vkms_drm_read(struct file *filp, char __user *buffer, size_t count, loff_t *offset)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_read(filp, buffer, count, offset);
+}
+
+int vkms_drm_gem_cma_mmap(struct file *filp, struct vm_area_struct *vma)
+{
+	printk("%s %d\n", __func__, __LINE__);
+	return drm_gem_cma_mmap(filp, vma);
+}
+
 static const struct file_operations vkms_driver_fops = {
-	.open			= drm_open,
+	.owner          = THIS_MODULE,
+	.open           = vkms_drm_open,
+	.release        = vkms_drm_release,
+    .unlocked_ioctl = vkms_drm_ioctl,
+    .poll           = vkms_drm_poll,
+    .read           = vkms_drm_read,
+    .mmap           = vkms_drm_gem_cma_mmap,
 };
 static struct drm_driver vkms_driver = {
-	.name			= "vkms",
-	.desc			= "Virtual Kernel Mode Setting",
-	.date			= "20241114",
-	.major			= 1,
-	.minor			= 1,
-	.fops			= &vkms_driver_fops,
+	.fops   = &vkms_driver_fops,
+	.name	= DRIVER_NAME,
+	.desc	= DRIVER_DESC,
+	.date	= DRIVER_DATE,
+	.major	= DRIVER_MAJOR,
+	.minor	= DRIVER_MINOR,
 
 };
 
